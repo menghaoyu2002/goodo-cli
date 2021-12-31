@@ -11,18 +11,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const TODO_FILEPATH = "./TODO.txt"
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "goodo",
 	Short: "Goodo is a simple TODO list CLI app",
 	Long: "A sweet and simple TODO list CLI app built with Go.\nMy first steps in writing code in this language ❤️",
 	Run: func(cmd *cobra.Command, args []string) {
-		todoList, err := os.ReadFile("./TODO.txt")
-		if err != nil {
-			os.WriteFile("./TODO.txt", []byte("TODO"), 0666)
-			todoList, _ = os.ReadFile("./TODO.txt")
-		}
-		fmt.Printf("%s", todoList)
+		todoList, _ := os.ReadFile(TODO_FILEPATH)
+		fmt.Printf("%s \n", todoList)
 	},
 }
 
