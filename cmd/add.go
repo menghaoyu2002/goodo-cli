@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	//"fmt"
-	"errors"
+	"bytes"
+	"fmt"
 	"log"
 	"os"
 
@@ -16,17 +16,16 @@ func init() {
 var newTodoCmd = &cobra.Command{
 	Use: "add",
 	Short: "Add a new task to the TODO list",
-	Args: func (cmd *cobra.Command, args []string) error {
-		if (len(args) > 1) {
-			return errors.New("too many arguments")
-		} else if (len(args) == 0) {
-			return errors.New("task name is required")
-		}
-		return nil
-	},
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		file, _ := os.OpenFile("./TODO.txt", os.O_APPEND|os.O_WRONLY, 0600)
-		if _, err := file.WriteString("\n" + args[0]); err != nil {
+		// get the number of lines in the file
+		fileContent, _ := os.ReadFile(TODO_FILEPATH)
+		numberOfLines := bytes.Count(fileContent, []byte("\n"))
+
+		file, _ := os.OpenFile(TODO_FILEPATH,  os.O_APPEND|os.O_WRONLY, 0600)
+		_, err := file.WriteString(fmt.Sprintf("%d. %s\n", numberOfLines, args[0]));
+
+		if err != nil {
 			log.Fatal(err)
 		}
 		file.Close()

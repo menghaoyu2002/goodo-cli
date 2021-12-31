@@ -20,7 +20,7 @@ var rootCmd = &cobra.Command{
 	Long: "A sweet and simple TODO list CLI app built with Go.\nMy first steps in writing code in this language ❤️",
 	Run: func(cmd *cobra.Command, args []string) {
 		todoList, _ := os.ReadFile(TODO_FILEPATH)
-		fmt.Printf("%s \n", todoList)
+		fmt.Printf("%s", todoList)
 	},
 }
 

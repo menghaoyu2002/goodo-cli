@@ -1,4 +1,5 @@
 /*
+func main() {
 Copyright © 2021 Menghao Yu menghaoyu2002@gmail.com
 
 */
@@ -20,7 +21,7 @@ func main() {
 func initializeTODOFile() {
 	_, err := os.Open("TODO.txt")
 	if err != nil {
-		err = os.WriteFile(cmd.TODO_FILEPATH, []byte("TODO"), 0666)
+		err = os.WriteFile(cmd.TODO_FILEPATH, []byte("TODO\n"), 0666)
 		if err != nil {
 			log.Fatal(err)
 		}
