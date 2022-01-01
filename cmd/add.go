@@ -23,7 +23,7 @@ var newTodoCmd = &cobra.Command{
 	Long: "Add a new task to the TODO list",
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		numberOfLines := numberOfLines()
+		numberOfLines := numberOfLines(TODO_FILEPATH)
 		file, _ := os.OpenFile(TODO_FILEPATH,  os.O_APPEND|os.O_WRONLY, 0600)
 		_, err := file.WriteString(fmt.Sprintf("%d. %s\n", numberOfLines, args[0]));
 
@@ -35,8 +35,8 @@ var newTodoCmd = &cobra.Command{
 }
 
 // numberOfLines returns the number of lines in the TODO.txt file
-func numberOfLines() int {
-	fileContent, err := os.ReadFile(TODO_FILEPATH)
+func numberOfLines(fileName string) int {
+	fileContent, err := os.ReadFile(fileName)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -36,10 +36,9 @@ Example Usage:
 			return errors.New("requires exactly one argument")
 		}
 
-		// check that argument is a valud line number
-		value, err := strconv.Atoi(args[0])
-		if err != nil || value < 1 || value > numberOfLines() {
-			return errors.New("argument must be a valid task number")
+		err := isValidLineNumber(args[0])
+		if err != nil {
+			return err
 		}
 
 		return nil
@@ -56,7 +55,7 @@ Example Usage:
 			if lineNum, _ := strconv.Atoi(args[0]); i < lineNum {
 				newContent += fileLines[i] + "\n"
 			} else if (i > lineNum) {
-				newContent += IncreaseLineNumber(fileLines[i], -1) + "\n"
+				newContent += increaseLineNumber(fileLines[i], -1) + "\n"
 			}
 		}
 
@@ -75,11 +74,21 @@ func init() {
 }
 
 // ChangeLineNumber increases the line number by lineNumberOffset
-func IncreaseLineNumber(line string, lineNumberOffset int) string {
+func increaseLineNumber(line string, lineNumberOffset int) string {
 	numbers := strings.Split(line, ".")
 
 	increasedNumber, _ := strconv.Atoi(numbers[0])
 	increasedNumber += lineNumberOffset 
 
 	return fmt.Sprint(increasedNumber) + line[len(numbers[0]):]
+}
+
+// isValidLineNumber checks that argument is a valud line number
+func isValidLineNumber(lineNumber string) error {
+	value, err := strconv.Atoi(lineNumber)
+
+	if err != nil || value < 1 || value > numberOfLines(TODO_FILEPATH) {
+		return errors.New("argument must be a valid task number")
+	}
+	return nil
 }
