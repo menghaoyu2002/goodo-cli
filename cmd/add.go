@@ -11,17 +11,19 @@ import (
 
 func init() {
 	rootCmd.AddCommand(newTodoCmd)
+	newTodoCmd.SetUsageTemplate(
+`Usage: 
+  goodo add [new task name]
+`)
 }
 
 var newTodoCmd = &cobra.Command{
 	Use: "add",
 	Short: "Add a new task to the TODO list",
+	Long: "Add a new task to the TODO list",
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		// get the number of lines in the file
-		fileContent, _ := os.ReadFile(TODO_FILEPATH)
-		numberOfLines := bytes.Count(fileContent, []byte("\n"))
-
+		numberOfLines := numberOfLines()
 		file, _ := os.OpenFile(TODO_FILEPATH,  os.O_APPEND|os.O_WRONLY, 0600)
 		_, err := file.WriteString(fmt.Sprintf("%d. %s\n", numberOfLines, args[0]));
 
@@ -30,5 +32,14 @@ var newTodoCmd = &cobra.Command{
 		}
 		file.Close()
 	},
+}
+
+// numberOfLines returns the number of lines in the TODO.txt file
+func numberOfLines() int {
+	fileContent, err := os.ReadFile(TODO_FILEPATH)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return bytes.Count(fileContent, []byte("\n"))
 }
 
